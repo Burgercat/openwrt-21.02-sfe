@@ -144,7 +144,7 @@
 +CONFIG_SPI_FLASH_XMC=y
 --- /dev/null
 +++ b/arch/arm/dts/mt7622-ubnt-unifi-6-lr.dts
-@@ -0,0 +1,202 @@
+@@ -0,0 +1,200 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2019 MediaTek Inc.
@@ -311,8 +311,6 @@
 +};
 +
 +&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pins>;
 +	status = "okay";
 +};
 +
@@ -441,7 +439,7 @@
  #ifdef CONFIG_MMC
  static int initr_mmc(void)
  {
-@@ -703,6 +719,9 @@ static init_fnc_t init_sequence_r[] = {
+@@ -703,6 +718,9 @@ static init_fnc_t init_sequence_r[] = {
  #ifdef CONFIG_CMD_ONENAND
  	initr_onenand,
  #endif
