@@ -46,12 +46,15 @@ make4.1+ perl python3.6+ rsync subversion unzip which
 
 ### Rebuild
 
-1. Run ```cd lede
+1. Run
+```
+cd lede
 git pull
 ./scripts/feeds update -a && ./scripts/feeds install -a
 make defconfig
 make download
-make```
+make
+```
 
 ### Related Repositories
 
