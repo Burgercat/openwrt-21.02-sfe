@@ -44,6 +44,15 @@ make4.1+ perl python3.6+ rsync subversion unzip which
    cross-compile toolchain and then cross-compile the GNU/Linux kernel & all chosen
    applications for your target system.
 
+### Rebuild
+
+1. Run ```cd lede
+git pull
+./scripts/feeds update -a && ./scripts/feeds install -a
+make defconfig
+make download
+make```
+
 ### Related Repositories
 
 The main repository uses multiple sub-repositories to manage packages of
