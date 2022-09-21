@@ -10,16 +10,18 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=unetd
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/unetd.git
-PKG_SOURCE_DATE:=2022-08-25
-PKG_SOURCE_VERSION:=d8220b098010041232374761fee258a8deff0865
-PKG_MIRROR_HASH:=6efced0eb451f6ac5d7facec3f45ce7f6928fae4481650ffcebf3b6434478550
+PKG_SOURCE_DATE:=2022-09-16.1
+PKG_SOURCE_VERSION:=6c888f897862b152e2cfae735faafc9cdcb07336
+PKG_MIRROR_HASH:=35df8c822c671495146c3d5d1c193c1d1a44721c274aee2035943eb5e8c04768
 
 PKG_LICENSE:=GPL-2.0
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 
-PKG_BUILD_DEPENDS:=bpf-headers
+PKG_BUILD_DEPENDS:=HAS_BPF_TOOLCHAIN:bpf-headers
 
 PKG_BUILD_PARALLEL:=1
+
+PKG_CONFIG_DEPENDS += CONFIG_UNETD_VXLAN_SUPPORT
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -30,13 +32,29 @@ define Package/unetd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=WireGuard based VPN connection manager for OpenWrt
-  DEPENDS:=+libubox +libubus +libblobmsg-json +libnl-tiny +kmod-wireguard +libbpf $(BPF_DEPENDS)
+  DEPENDS:=+libubox +libubus +libblobmsg-json +libnl-tiny +kmod-wireguard +UNETD_VXLAN_SUPPORT:libbpf
+endef
+
+define Package/unetd/config
+	config UNETD_VXLAN_SUPPORT
+		bool "VXLAN support"
+		depends on PACKAGE_unetd
+		depends on HAS_BPF_TOOLCHAIN
+		default y
+
+endef
+
+define Package/unet-dht
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=unetd
+  TITLE:=unetd DHT discovery support
 endef
 
 define Package/unet-cli
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=unetd +ucode +ucode-mod-fs
+  DEPENDS:=+unetd +ucode +ucode-mod-fs
   TITLE:=unetd administration command line utility
 endef
 
@@ -45,12 +63,15 @@ TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/include
 
 CMAKE_OPTIONS += \
-	-DLIBNL_LIBS=-lnl-tiny
+	-DLIBNL_LIBS=-lnl-tiny \
+	-DVXLAN_SUPPORT=$(if $(CONFIG_UNETD_VXLAN_SUPPORT),ON,OFF)
 
-define Build/Compile
+ifdef CONFIG_UNETD_VXLAN_SUPPORT
+  define Build/Compile
 	$(call CompileBPF,$(PKG_BUILD_DIR)/mss-bpf.c)
 	$(call Build/Compile/Default,)
-endef
+  endef
+endif
 
 define Package/unetd/conffiles
 /etc/unetd
@@ -69,9 +90,17 @@ define Package/unetd/install
 		$(PKG_INSTALL_DIR)/usr/sbin/unetd \
 		$(PKG_INSTALL_DIR)/usr/sbin/unet-tool \
 		$(1)/usr/sbin/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/mss-bpf.o $(1)/lib/bpf/mss.o
+	$(if $(CONFIG_UNETD_VXLAN_SUPPORT),$(INSTALL_DATA) $(PKG_BUILD_DIR)/mss-bpf.o $(1)/lib/bpf/mss.o)
 	$(INSTALL_BIN) ./files/unetd.init $(1)/etc/init.d/unetd
 	$(INSTALL_BIN) ./files/unetd.sh $(1)/lib/netifd/proto
+endef
+
+define Package/unet-dht/install
+	$(INSTALL_DIR) \
+		$(1)/etc/init.d \
+		$(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unet-dht $(1)/usr/sbin
+	$(INSTALL_BIN) ./files/unet-dht.init $(1)/etc/init.d/unet-dht
 endef
 
 define Package/unet-cli/install
@@ -80,4 +109,5 @@ define Package/unet-cli/install
 endef
 
 $(eval $(call BuildPackage,unetd))
+$(eval $(call BuildPackage,unet-dht))
 $(eval $(call BuildPackage,unet-cli))
