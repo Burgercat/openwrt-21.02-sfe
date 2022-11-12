@@ -228,8 +228,7 @@ define Device/asus_rt-ac42u
 	UIMAGE_NAME:=$(shell echo -e '\03\01\01\01RT-AC82U')
 	DEVICE_PACKAGES := ath10k-firmware-qca9984-ct kmod-usb-ledtrig-usbport
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += asus_rt-ac42u
+TARGET_DEVICES += asus_rt-ac42u
 
 define Device/asus_rt-ac58u
 	$(call Device/FitImageLzma)
@@ -566,6 +565,20 @@ endef
 # Missing DSA Setup
 #TARGET_DEVICES += ezviz_cs-w3-wd1200g-eup
 
+define Device/glinet_gl-a1300
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := GL.iNet
+	DEVICE_MODEL := GL-A1300
+	SOC := qcom-ipq4018
+	DEVICE_DTS_CONFIG := config@ap.dk01.1-c2
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	IMAGE_SIZE := 131072k
+	DEVICE_PACKAGE := ipq-wifi-glinet_gl-a1300
+endef
+TARGET_DEVICES += glinet_gl-a1300
+
 define Device/glinet_gl-ap1300
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -762,8 +775,7 @@ define Device/mobipromo_cm520-79f
 	PAGESIZE := 2048
 	DEVICE_PACKAGES := kmod-usb-ledtrig-usbport
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += mobipromo_cm520-79f
+TARGET_DEVICES += mobipromo_cm520-79f
 
 define Device/netgear_ex61x0v2
 	$(call Device/DniImage)
@@ -817,8 +829,7 @@ define Device/netgear_rbr50
 	DEVICE_VARIANT := v1
 	NETGEAR_BOARD_ID := RBR50
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += netgear_rbr50
+TARGET_DEVICES += netgear_rbr50
 
 define Device/netgear_rbs50
 	$(call Device/netgear_rbx50)
@@ -826,8 +837,7 @@ define Device/netgear_rbs50
 	DEVICE_VARIANT := v1
 	NETGEAR_BOARD_ID := RBS50
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += netgear_rbs50
+TARGET_DEVICES += netgear_rbs50
 
 define Device/netgear_srx60
 	$(call Device/netgear_orbi)
@@ -842,16 +852,14 @@ define Device/netgear_srr60
 	DEVICE_MODEL := SRR60
 	NETGEAR_BOARD_ID := SRR60
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += netgear_srr60
+TARGET_DEVICES += netgear_srr60
 
 define Device/netgear_srs60
 	$(call Device/netgear_srx60)
 	DEVICE_MODEL := SRS60
 	NETGEAR_BOARD_ID := SRS60
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += netgear_srs60
+TARGET_DEVICES += netgear_srs60
 
 define Device/netgear_wac510
 	$(call Device/FitImage)
@@ -1048,8 +1056,7 @@ define Device/sony_ncp-hg100-cellular
 	DEVICE_PACKAGES := e2fsprogs ipq-wifi-sony_ncp-hg100-cellular \
 		kmod-fs-ext4 uqmi
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += sony_ncp-hg100-cellular
+TARGET_DEVICES += sony_ncp-hg100-cellular
 
 define Device/teltonika_rutx10
 	$(call Device/FitImage)
@@ -1119,8 +1126,7 @@ define Device/zte_mf289f
 	DEVICE_MODEL := MF289F
 	DEVICE_PACKAGES += ipq-wifi-zte_mf289f ath10k-firmware-qca9984-ct
 endef
-# Missing DSA Setup
-#TARGET_DEVICES += zte_mf289f
+TARGET_DEVICES += zte_mf289f
 
 define Device/zyxel_nbg6617
 	$(call Device/FitImageLzma)
