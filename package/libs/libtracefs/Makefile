@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtracefs
-PKG_VERSION:=1.5.0
+PKG_VERSION:=1.6.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/
-PKG_HASH:=b796af4b6a0a6e6cd17ae150ed69adccc0b6401804e009b363fe7d982b04a58e
+PKG_HASH:=52ce793dbb35a3e59bddce31de09a5d92cedd4d0702e64d0916f1ccdb00526c9
 
 PKG_MAINTAINER:=Nick Hainke <vincent@systemli.org>
 
